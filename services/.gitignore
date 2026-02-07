@@ -1,3 +1,12 @@
 /auth/dist
 /auth/node_modules
 /auth/.env
+
+/utils/node_modules
+/utils/dist
+
+/utils/.env
+
+# Environment files
+.env
+**/.env

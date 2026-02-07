@@ -1,5 +1,7 @@
-import app from "./app.js";
+
 import dotenv from "dotenv";
+import app from "./app.js";
+
 import {sql} from "./utils/db.js";
 
 
@@ -28,6 +30,7 @@ async function initDb() {
                 resume VARCHAR(255),
                 resume_public_id VARCHAR(255),
                 profile_pic VARCHAR(255),
+                profile_pic_public_id VARCHAR(255),
                 created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 subscription TIMESTAMPTZ
                 )
@@ -55,8 +58,11 @@ async function initDb() {
         process.exit(1);
     }
 }
+
+const PORT=process.env.PORT||5000
+
 initDb().then(()=> {
-    app.listen(process.env.PORT,()=>{
+    app.listen(PORT,()=>{
     console.log(`Auth service is running on http://localhost:${process.env.PORT} `
         
     );
