@@ -63,7 +63,7 @@ const PORT=process.env.PORT||5000
 
 initDb().then(()=> {
     app.listen(PORT,()=>{
-    console.log(`Auth service is running on http://localhost:${process.env.PORT} `
+    console.log(`Auth service is running on http://localhost:${PORT} `
         
     );
 });
