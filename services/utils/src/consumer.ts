@@ -41,8 +41,8 @@ export const startSendMailConsumer = async()=> {
                         port:465,
                         secure: true,
                         auth: {
-                            user: "xyz",
-                            pass:"yxz"
+                            user: process.env.Useremail,
+                            pass: process.env.emailPassword
                         }
                     })
 
