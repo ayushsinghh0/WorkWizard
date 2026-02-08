@@ -10,3 +10,7 @@
 # Environment files
 .env
 **/.env
+
+
+/users/dist
+/users/node_modules
