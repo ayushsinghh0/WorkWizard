@@ -18,11 +18,11 @@ interface User{
 }
 
 
-export interface Authenticated extends Request {
+export interface AuthenticatedRequest extends Request {
     user?:User
 }
 
-export const isAuth = async (req:Authenticated,res:Response,next:NextFunction):Promise<void>=>{
+export const isAuth = async (req:AuthenticatedRequest,res:Response,next:NextFunction):Promise<void>=>{
 
     try{
         const authHeader = req.headers.authorization;
