@@ -7,6 +7,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"
 import { forgotPasswordTemplate } from "../template.js";
 import { publishTopic } from "../producer.js";
+import { redisClient } from "../index.js";
 
 
 export const registerUser = TryCatch( async (req,res,next)=>{
@@ -152,7 +153,11 @@ export const forgotPassword =  TryCatch(async(req,res,next)=>{
     }
 );
 
-    const resetLink = `${process.env.Frontend_Url}/reset/${resetToken}`
+    const resetLink = `${process.env.Frontend_Url}/reset/${resetToken}`;
+
+    await redisClient.set(`forgot:${email}`,resetToken,{
+        EX:900,
+    })
 
     const message = {
         to:email,
@@ -165,4 +170,54 @@ export const forgotPassword =  TryCatch(async(req,res,next)=>{
       res.json({
             message:"If that email exists , we have sent a reset link"
         })
+})
+
+export const resetPassword = TryCatch(async(req,res,next)=>{
+    const {token }=req.params;
+    const {password}=req.body;
+
+    let decoded: any;
+
+    
+    if (typeof token !== "string") {
+         throw new Error("Invalid token");
+    }   
+
+    try{
+        decoded = jwt.verify(token ,process.env.JWT_SEC as string)
+    } catch(error){
+        throw new ErrorHandler(400,"Invalid Token type");
+
+    }
+
+    if(decoded.type!=="reset"){
+        throw new ErrorHandler(400,"Invalid token type")
+    }
+
+    const email = decoded.email;
+
+    const stroredToken = await redisClient.get(`forgot:${email}`);
+
+    if(!stroredToken || stroredToken !== token) {
+        throw new ErrorHandler(400,"token has been expired");
+    }
+
+
+    const users = await sql `SELECT user_id FROM users WHERE email=${email}`
+
+    if(users.length===0){
+        throw new ErrorHandler(404,"User not found");
+    }
+
+    const user = users[0]
+
+    const hashPassword= await bcrypt.hash(password,10);
+
+    await sql `UPDATE users SET password = ${hashPassword} WHERE user_id = ${user.user_id}`;
+
+    await redisClient.del(`forgot:${email}`);
+
+    res.json({
+        message:"Password changed successfully"
+    })
 })
