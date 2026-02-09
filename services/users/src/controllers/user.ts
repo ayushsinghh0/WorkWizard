@@ -19,20 +19,17 @@ export const myProfile=TryCatch(async(req:AuthenticatedRequest,res,next)=>{
 export const getUserProfile=TryCatch(async (req,res,next)=>{
     const {userId}=req.params;
 
-
     const users=await sql 
             `
             SELECT u.user_id, u.name, u.email,
-             u.phone_number, u.role, u.bio,
-              u.resume, u.resume_public_id, u.resume,
-              u.resume_public_id, u.subscription,
-               ARRAY_AGG(s.name) FILTER (WHERE s.name IS NOT NULL) as skills FROM users u LEFT JOIN user_skills us ON  u.user_id=us.user_id LEFT JOIN skills s ON us.skill_id = s.skill_id
+            u.phone_number, u.role, u.bio,
+            u.resume, u.resume_public_id, u.resume,
+            u.resume_public_id, u.subscription,
+            ARRAY_AGG(s.name) FILTER (WHERE s.name IS NOT NULL) as skills FROM users u LEFT JOIN user_skills us ON  u.user_id=us.user_id LEFT JOIN skills s ON us.skill_id = s.skill_id
             WHERE u.user_id = ${userId}
             GROUP BY u.user_id;
             `
     if(users.length===0){
-            
-             
             throw new ErrorHandler(404,"User not found");
         
             return;
@@ -43,12 +40,7 @@ export const getUserProfile=TryCatch(async (req,res,next)=>{
         user.skills = user.skills || []
 
         res.json(user)
-
-    
-
 })
-
-
 
 export const updateUserProfile = TryCatch(async (req:AuthenticatedRequest,res)=>{
     const user=req.user;
@@ -64,7 +56,7 @@ export const updateUserProfile = TryCatch(async (req:AuthenticatedRequest,res)=>
     const newBio = bio || user.bio;
 
 
-    const [updatedUser]=await sql`
+    const [updatedUser]=await sql `
     UPDATE users SET name=${newName}, phone_number=${newPhoneNumber}, bio = ${newBio}
     WHERE user_id = ${user.user_id}
     RETURNING user_id, name, email, phone_number,bio
@@ -80,8 +72,6 @@ export interface UploadResponse {
   url: string;
   public_id: string;
 }
-
-
 
 export const updateProfilePic = TryCatch(async(req:AuthenticatedRequest,res)=>{
     const user=req.user;
@@ -116,9 +106,6 @@ export const updateProfilePic = TryCatch(async(req:AuthenticatedRequest,res)=>{
             updatedUser
         })
 })
-
-
-
 
 
 export const updateResume = TryCatch(async(req:AuthenticatedRequest,res)=>{
@@ -209,7 +196,6 @@ export const addSkillToUser= TryCatch(
     }
 )
 
-
 export const deleteSkillFromUser =  TryCatch(
     async (req: AuthenticatedRequest,res)=>{
         const user = req.user;
@@ -235,5 +221,3 @@ export const deleteSkillFromUser =  TryCatch(
             message: `Skill ${skillName.trim()} was delted successfully`
         });
 })
-
-
