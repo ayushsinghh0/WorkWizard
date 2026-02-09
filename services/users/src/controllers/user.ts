@@ -24,8 +24,8 @@ export const getUserProfile=TryCatch(async (req,res,next)=>{
             `
             SELECT u.user_id, u.name, u.email,
              u.phone_number, u.role, u.bio,
-              u.resume, u.resume_public_id, u.profile_pic,
-              u.profile_pic_public_id, u.subscription,
+              u.resume, u.resume_public_id, u.resume,
+              u.resume_public_id, u.subscription,
                ARRAY_AGG(s.name) FILTER (WHERE s.name IS NOT NULL) as skills FROM users u LEFT JOIN user_skills us ON  u.user_id=us.user_id LEFT JOIN skills s ON us.skill_id = s.skill_id
             WHERE u.user_id = ${userId}
             GROUP BY u.user_id;
@@ -95,7 +95,7 @@ export const updateProfilePic = TryCatch(async(req:AuthenticatedRequest,res)=>{
             throw new ErrorHandler(400,"no image file found");
         }
 
-        const oldPublicId=user.profile_pic_public_id;
+        const oldPublicId=user.resume_public_id;
 
         const fileBuffer = getBuffer(file);
 
@@ -109,10 +109,49 @@ export const updateProfilePic = TryCatch(async(req:AuthenticatedRequest,res)=>{
         })
 
         const [updatedUser]=await sql `
-        UPDATE users SET profile_pic = ${uploadResult.url}, profile_pic_public_id = ${uploadResult.public_id} WHERE user_id = ${user.user_id} RETURNING user_id,name,profile_pic;`;
+        UPDATE users SET resume = ${uploadResult.url}, resume_public_id = ${uploadResult.public_id} WHERE user_id = ${user.user_id} RETURNING user_id,name,resume;`;
 
         res.json({
             message:"profile pic updated",
             updatedUser
         })
 })
+
+
+
+
+
+export const updateResume = TryCatch(async(req:AuthenticatedRequest,res)=>{
+    const user=req.user;
+    if(!user){
+        throw new ErrorHandler(401,"AUthentication required");
+    }
+
+      const file=req.file;
+
+        if(!file){
+            throw new ErrorHandler(400,"no pdf file found");
+        }
+
+        const oldPublicId=user.resume_public_id;
+
+        const fileBuffer = getBuffer(file);
+
+        if(!fileBuffer || !fileBuffer.content) {
+            throw new ErrorHandler(500,"failed to generate buffer");
+        }
+        
+        const {data:uploadResult}=await axios.post<UploadResponse>(`${process.env.UPLOAD_SERVICE}/api/utils/upload`,{
+            buffer: fileBuffer.content,
+            public_id: oldPublicId,
+        })
+
+        const [updatedUser]=await sql `
+        UPDATE users SET resume = ${uploadResult.url}, resume_public_id = ${uploadResult.public_id} WHERE user_id = ${user.user_id} RETURNING user_id,name,resume;`;
+
+        res.json({
+            message:"resume updated",
+            updatedUser
+        })
+})
+
