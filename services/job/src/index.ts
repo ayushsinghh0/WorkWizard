@@ -1,7 +1,8 @@
-
 import "dotenv/config";
 import app from "./app.js";
 import { initDB } from "./Db/index.js";
+import { connectKafka } from "./producer.js";
+connectKafka();
 
 initDB().then(() => {
     app.listen(process.env.PORT, () => {
