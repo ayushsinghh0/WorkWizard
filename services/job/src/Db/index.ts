@@ -2,7 +2,7 @@ import { sql } from "../utils/db.js"
 
 export async function initDB() {
     try {
-        await sql`
+        await sql `
         DO $$
         BEGIN
             IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'job_type') THEN 
@@ -18,7 +18,7 @@ export async function initDB() {
         `;
 
 
-        await sql`
+        await sql `
         CREATE TABLE IF NOT EXISTS companies (
         company_id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL UNIQUE,
@@ -32,7 +32,7 @@ export async function initDB() {
         `;
 
         // Fix: rename misspelled column if it exists
-        await sql`
+        await sql `
         DO $$
         BEGIN
             IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='companies' AND column_name='recrutier_id') THEN
@@ -41,7 +41,7 @@ export async function initDB() {
         END $$;
         `;
 
-        await sql`
+        await sql `
         CREATE TABLE IF NOT EXISTS jobs(
             job_id SERIAL PRIMARY KEY,
             title VARCHAR(255) NOT NULL,
@@ -59,7 +59,7 @@ export async function initDB() {
         );
         `
 
-        await sql`
+        await sql `
             CREATE TABLE IF NOT EXISTS applications(
             application_id SERIAL PRIMARY KEY,
             job_id INTEGER NOT NULL REFERENCES jobs(job_id ) ON DELETE CASCADE,
