@@ -1,24 +1,24 @@
 import { sql } from "../utils/db.js"
 
-export async  function initDB(){
+export async function initDB() {
     try {
-        await sql `
+        await sql`
         DO $$
         BEGIN
             IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'job_type') THEN 
             CREATE TYPE job_type AS ENUM ('Full-time','Part-time','Contract','Internship');
             END IF;
-            IF NOT EXIST (SELECT 1 FROM pg_type WHERE typname = 'work_location') THEN 
+            IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'work_location') THEN 
             CREATE TYPE work_location AS ENUM ('On-site','Remote','Hybrid');
             END IF;
-            IF NOT EXIST (SELECT 1 FROM pg_type WHERE typname = 'application_status') THEN 
+            IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'application_status') THEN 
             CREATE TYPE application_status AS ENUM ('Submitted','Rejected','Hired');
             END IF;
         END $$;
         `;
 
 
-        await sql `
+        await sql`
         CREATE TABLE IF NOT EXISTS companies (
         company_id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL UNIQUE,
@@ -31,7 +31,17 @@ export async  function initDB(){
         );
         `;
 
-        await sql `
+        // Fix: rename misspelled column if it exists
+        await sql`
+        DO $$
+        BEGIN
+            IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='companies' AND column_name='recrutier_id') THEN
+                ALTER TABLE companies RENAME COLUMN recrutier_id TO recruiter_id;
+            END IF;
+        END $$;
+        `;
+
+        await sql`
         CREATE TABLE IF NOT EXISTS jobs(
             job_id SERIAL PRIMARY KEY,
             title VARCHAR(255) NOT NULL,
@@ -49,7 +59,7 @@ export async  function initDB(){
         );
         `
 
-        await sql `
+        await sql`
             CREATE TABLE IF NOT EXISTS applications(
             application_id SERIAL PRIMARY KEY,
             job_id INTEGER NOT NULL REFERENCES jobs(job_id ) ON DELETE CASCADE,
@@ -65,8 +75,8 @@ export async  function initDB(){
         `;
 
         console.log("Job service database tables checked and created successfully.")
-    } catch(error){
-        console.log("Error while creating tables ",error);
+    } catch (error) {
+        console.log("Error while creating tables ", error);
         process.exit(1);
     }
 }
