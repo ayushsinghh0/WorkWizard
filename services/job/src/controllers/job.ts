@@ -212,7 +212,7 @@ export const getCompanyDetails=TryCatch(async(req:AuthenticatedRequest,res)=>{
 })
 
 
-export const getAllActiveJobs = TryCatch(async (req:AuthenticatedRequest,res)=>{
+export const getAllActiveJobs = TryCatch(async (req,res)=>{
   const {title,location}=req.query as {
     title?:string,
     location?:string;
@@ -244,4 +244,40 @@ export const getAllActiveJobs = TryCatch(async (req:AuthenticatedRequest,res)=>{
   const jobs =( await sql.query(queryString,values) as any[]);
 
   res.json(jobs);
+})
+
+export const getSingleJob=TryCatch(async(req,res)=>{
+  const [job]= await sql `SELECT * FROM jobs WHERE job_id = ${req.params.jobId}`;
+
+  res.json(job)
+})
+
+
+export const getAllApplicationForJob=TryCatch(async(req:AuthenticatedRequest,res)=>{
+
+
+    const user = req.user;
+
+  if(!user){
+    throw new ErrorHandler(401,"Authenticated required");
+  }
+
+  if(user.role!=="recruiter"){
+    throw new ErrorHandler(403,"Forbidden:Only recruiter can access")
+  }
+
+  const {jobId}=req.params;
+  const [job]= await sql `SELECT posted_by_recruiter_id FROM jobs WHERE job_id=${jobId}`;
+
+  if(!job){
+    throw new ErrorHandler(404,"job not found");
+  }
+
+  if(job.posted_by_recruiter_id!== user.user_id){
+    throw new ErrorHandler(403,"Forbidden you are not allowed");
+  }
+
+  const application= await sql `SELECT * FROM applications WHERE job_id = ${jobId} ORDER BY subscribed DESC, applied_at ASC   `;
+
+ res.json(application);
 })
