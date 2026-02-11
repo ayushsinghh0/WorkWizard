@@ -2,9 +2,10 @@
 import Link from "next/link";
 import React, { useState } from "react"
 import { Button } from "./ui/button";
-import { Briefcase, Home, Info, User } from "lucide-react";
-import { Popover, PopoverTrigger } from "./ui/popover";
+import { Briefcase, Home, Info, LogOut, Menu, User, X } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { ModeToggle } from "./ui/mode-toggle";
 
 
 export const NavBar = ()=>{
@@ -67,12 +68,77 @@ export const NavBar = ()=>{
 
                                         </PopoverTrigger>
 
-                                        <Popover
+                                        <PopoverContent className="w-56 p-2" align = "end">
+                                            <div className="px-3 py-2 mb-2 border-b">
+                                                <p className="text-sm font-semibold">Ayush</p>
+                                                <p className="text-xs opacity-60 truncate">prashant@gmail.com</p>
+                                            </div>  
+
+                                            <Link href={"/account"}>
+                                                <Button className="w-full justify-start gap-2" variant={"ghost"}>
+                                                    <User size={16}/> My profile
+                                                </Button>
+                                            </Link>
+
+                                            <Button className="w-full justify-start gap-2 mt-2" variant={"ghost"} onClick = {logoutHandler}>
+                                                <LogOut size={16}/> Log Out
+                                            </Button>
+                                        </PopoverContent>
                                     </Popover>
+                 
                                   </>: <Link href={"/login"}><Button className="gap-2"><User size={16}/>Sign in</Button></Link>}
+                                <ModeToggle/>
+                
+                    </div>
+
+                    {/* Mbile meanu button */}
+                    <div className="md:hidden flex items-center gap-3 ">
+                            <ModeToggle/>
+
+
+                            <button onClick={toggleMenu} className="p-2 rounded-lg hover:bg-accent transition-colors " aria-label ="Toggle menu">{isOpen ? <X size={24}/>:<Menu size={24}/>}</button>
+
                     </div>
                 </div>
             </div>
+
+            {/* Moblieee view */}
+            <div className={`md:hidden border-t overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-96 opacity-100" : "max-h-0 opacity-0"}`}>
+                <div className="px-3 py-3 space-y-1 bg-background/95 backdrop-blur-md">
+                    {/* isauth or user */}
+                    <Link href={'/'} onClick={toggleMenu}>
+                       <Button variant={"ghost"} className="w-full justify-start gap-3 h-11">
+                            <Home size ={18}/> 
+                                Home
+                       </Button>
+                    </Link>
+
+
+                    <Link href={'/Jobs'} onClick={toggleMenu}>
+                       <Button variant={"ghost"} className="w-full justify-start gap-3 h-11">
+                            < Briefcase size ={18}/> 
+                                Jobs
+                       </Button>
+                    </Link>
+
+                    <Link href={'/'} onClick={toggleMenu}>
+                       <Button variant={"ghost"} className="w-full justify-start gap-3 h-11">
+                            <Info size ={18}/> 
+                                About
+                       </Button>
+                    </Link>
+
+                    {
+                        isAuth ? (<></> ): ( 
+                        <Button variant={"destructive"} className="w-full justify-start gap-3 h-11">
+                            <LogOut size ={18}/> 
+                                About
+                       </Button>)
+                    }
+                </div>
+            </div>
+
+
         </nav>
     )}
                         
