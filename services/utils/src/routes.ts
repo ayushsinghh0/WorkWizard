@@ -42,7 +42,7 @@ router.post("/carrer",async(req,res)=>{
     try{
         const {skills}=req.body;
 
-        if(!skills||skills.trim()===0) {
+        if(!skills) {
             return res.status(400).json({
                 message:"Skills Required",
             });
@@ -110,10 +110,9 @@ router.post("/carrer",async(req,res)=>{
                     }
                     )}
 
-                     return res.json({
-                            success: true,
-                            data: jsonResponse,
-                            });
+                     return res.json(
+                           jsonResponse,
+                            );
 
     } catch(error:any){
         res.status(500).json({

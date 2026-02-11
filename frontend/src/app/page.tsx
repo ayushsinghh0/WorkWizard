@@ -1,3 +1,4 @@
+import CarrerGuide from "@/components/carrer-guide";
 import Hero from "@/components/hero";
 import { Button } from "@/components/ui/button";
 import React from "react";
@@ -6,6 +7,7 @@ const Home = ()=>{
   return <div> 
     
     <Hero/>
+    <CarrerGuide/>
   </div>
 }
 
