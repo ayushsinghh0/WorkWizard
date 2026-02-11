@@ -19,7 +19,7 @@ export const NavBar = ()=>{
         setIsOpen(!isOpen);
     }
 
-    const isAuth = false;
+    const isAuth = true;
 
     const logoutHandler = () =>{}
     return (
@@ -29,12 +29,11 @@ export const NavBar = ()=>{
                     <div className="flex items-center">
                         <Link href={"/"} className="flex items-center gap-1 group">
                              <div className="text-2xl font-bold tracking-tight">
-                                <span className="bg-linear-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-                                    Hired </span>
-                                <span className="text-red-500">
-                                    Heaven
-                                </span>
-                               
+                                <span className="bg-linear-to-r from-violet-400 to-violet-700 bg-clip-text text-transparent">
+                                    Work </span>
+                                    <span className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+                                      Wizard
+                                    </span>
                                </div>
                              </Link>
                            </div>
@@ -106,7 +105,7 @@ export const NavBar = ()=>{
             <div className={`md:hidden border-t overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-96 opacity-100" : "max-h-0 opacity-0"}`}>
                 <div className="px-3 py-3 space-y-1 bg-background/95 backdrop-blur-md">
                     {/* isauth or user */}
-                    <Link href={'/'} onClick={toggleMenu}>
+                    <Link href={'/Home'} onClick={toggleMenu}>
                        <Button variant={"ghost"} className="w-full justify-start gap-3 h-11">
                             <Home size ={18}/> 
                                 Home
@@ -121,7 +120,7 @@ export const NavBar = ()=>{
                        </Button>
                     </Link>
 
-                    <Link href={'/'} onClick={toggleMenu}>
+                    <Link href={'/about'} onClick={toggleMenu}>
                        <Button variant={"ghost"} className="w-full justify-start gap-3 h-11">
                             <Info size ={18}/> 
                                 About
@@ -129,11 +128,27 @@ export const NavBar = ()=>{
                     </Link>
 
                     {
-                        isAuth ? (<></> ): ( 
-                        <Button variant={"destructive"} className="w-full justify-start gap-3 h-11">
-                            <LogOut size ={18}/> 
-                                About
-                       </Button>)
+                        isAuth ? (<>   <Link href={'/about'} onClick={toggleMenu}>
+                       <Button variant={"ghost"} className="w-full justify-start gap-3 h-11">
+                            <User size ={18}/> 
+                                myProfile
+                       </Button>
+                    </Link>
+                        <Button variant={"destructive"} className="w-full justify-start gap-3 h-11"
+                            onClick={
+                                ()=>{
+                                    logoutHandler();
+                                    toggleMenu();
+                                }
+                            }>
+                            <LogOut size ={18}/> LogOut
+                                
+                       </Button></> ): ( 
+                        <Link href={"/login"} onClick={toggleMenu}><Button variant={"ghost"} className="w-full justify-start gap-3 h-11 mt-2">
+                            <User size ={18}/> 
+                                Sign-in
+                       </Button> </Link>
+                       )
                     }
                 </div>
             </div>
