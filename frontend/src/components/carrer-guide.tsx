@@ -1,6 +1,6 @@
 "use client";
 
-import { CareerGuideResponse, utils_service } from "@/type";
+import { CareerGuideResponse} from "@/type";
 import axios from "axios";
 import { ArrowRight, BookOpen, Briefcase, Lightbulb, Loader2, Sparkles, Target, TrendingUp, X } from "lucide-react";
 import React, { useState } from "react";
@@ -15,6 +15,8 @@ import {
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
+import { utils_service } from "@/context/appContext";
+import toast from "react-hot-toast";
 
 const CarrerGuide = () => {
   const [open, setOpen] = useState(false);
@@ -43,7 +45,7 @@ const CarrerGuide = () => {
   const getCarrerGuidance = async () => {
     if (!skills.length || skills.every(s => !s.trim())) {
  
-      alert("Please add atleast on skills");
+      toast.error("Please add atleast on skills");
       return;
     }
     setLoading(true);
@@ -54,12 +56,12 @@ const CarrerGuide = () => {
 
       setResponse(data);
 
-      alert("Carrer guidance generated");
+      toast.success("Carrer guidance generated");
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data?.message || "Server error");
+        toast.error(error.response?.data?.message || "Server error");
       } else {
-        alert("Something went wrong");
+         toast.error("Something went wrong");
       }
     } finally {
       setLoading(false);

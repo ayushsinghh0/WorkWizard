@@ -25,9 +25,10 @@ import {
   FileCheck,
   Zap,
 } from "lucide-react";
-import { ResumeAnalysisResponse, utils_service } from "@/type";
+import { ResumeAnalysisResponse } from "@/type";
+import { utils_service } from "@/context/appContext";
 
-// import toast from "react-hot-toast";
+import toast from "react-hot-toast";
 const ResumeAnalyzer = () => {
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -38,13 +39,12 @@ const ResumeAnalyzer = () => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       if (selectedFile.type !== "application/pdf") {
-        // toast.error("Please upload a PDF file");
-        alert("Please upload a PDF file");
+        toast.error("Please upload a PDF file");
+        
         return;
       }
       if (selectedFile.size > 5 * 1024 * 1024) {
-        // toast.error("File size should be less than 5MB");
-        alert("File size should be less than 5MB");
+        toast.error("File size should be less than 5MB");
         return;
       }
       setFile(selectedFile);
@@ -60,8 +60,7 @@ const ResumeAnalyzer = () => {
   };
   const analyzeResume = async () => {
     if (!file) {
-      // toast.error("Please upload a resume");
-      alert("Please upload a resume");
+       toast.error("Please upload a resume");
       return;
     }
     setLoading(true);
@@ -74,19 +73,18 @@ const ResumeAnalyzer = () => {
         },
       );
       setResponse(data);
-      // toast.success("Resume analyzed successfully!");
-      alert("Resume analyzed successfully!");
+      toast.success("Resume analyzed successfully!");
     } catch (error: unknown) {
       // toast.error(error.response?.data?.message || "Failed to analyze resume");
     /* 
      alert(error.response.data.message || "Failed to analyze resume");
       console.log(error ); */
          if (error instanceof AxiosError) {
-            alert(error.response?.data?.message || "Failed to analyze resume");
+           toast.error(error.response?.data?.message || "Failed to analyze resume");
         } else if (error instanceof Error) {
-            alert(error.message);
+            toast.error(error.message);
         } else {
-            alert("Something went wrong");
+            toast.error("Something went wrong");
         }
 
   console.log(error);
