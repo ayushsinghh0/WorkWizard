@@ -83,6 +83,7 @@ export interface ResumeAnalysisResponse {
     setUser: React.Dispatch<React.SetStateAction<User|null>>;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
     setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
+    logoutUser : ()=>Promise<void>;
 
  }
 

@@ -1,9 +1,8 @@
-
 "use client"
 import { auth_service, useAppData } from "@/context/appContext";
 import axios from "axios";
 import { redirect } from "next/navigation";
-import React, { FormEvent, useState } from "react";
+import React, {  useState } from "react";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie"
 import { Label } from "@/components/ui/label";
@@ -11,27 +10,25 @@ import {  ArrowRight, Mail } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Loading } from "@/components/loading";
 
 const LoginPage = () =>{
-
     const [email,setEmail]  = useState("");
     const [password,setPassword] = useState("");
     const [btnLoading,setBtnLoading]=useState(false);
 
-
     const {isAuth,setUser,loading,setIsAuth}=useAppData();
 
+    if(loading) return <Loading/>
+
     if(isAuth) return redirect("/");
-
-
-
     
     const submitHandler = async (e:React.FormEvent)=>{
         e.preventDefault()
 
-
-
         setBtnLoading(true)
+
+        
         try{
             const {data}= await axios.post(`${auth_service}/api/auth/login`,{
                 email,password
@@ -43,7 +40,7 @@ const LoginPage = () =>{
                 secure:true,
                 path:"/"
             });
-            setUser(data.user);
+            setUser(data.userObject);
             setIsAuth(true);
 
         } catch (error:unknown) {
@@ -109,7 +106,6 @@ const LoginPage = () =>{
                     </div>
                 </div>
             </div>
-
 }
 
 
