@@ -1,22 +1,24 @@
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useAppData } from "@/context/appContext";
 import { AccountProps } from "@/type";
-import { Briefcase, FileText, Mail, Notebook, NotebookText } from "lucide-react";
+import { Briefcase, Camera, FileText, Mail, Notebook, NotebookText } from "lucide-react";
 import Link from "next/link";
 import React, { ChangeEvent, useRef, useState } from "react";
 
 
 const Info:React.FC<AccountProps>=({user,isYourAccount})=>{
-
         const [btnLoading,setBtnLoading] = useState(false);
         const inputRef=useRef<HTMLInputElement>(null);
         const editRef=useRef<HTMLInputElement>(null);
         const resumeRef=useRef<HTMLInputElement>(null);
 
         const [name,setName]=useState("");
-        const [phonenumber,setPhonenumber]=useState("");
+        const [phonenumber,setPhoneNumber]=useState("");
         const [bio,setBio]=useState("");
-        
 
+        const {updateProfilePic}=useAppData()
+        
         const handleClick=()=>{
             inputRef.current?.click();
         }
@@ -24,9 +26,35 @@ const Info:React.FC<AccountProps>=({user,isYourAccount})=>{
         const changeHandler = (e:ChangeEvent<HTMLInputElement>)=>{
                 const file=e.target.files?.[0]
                 if(file){
-                    const formData = new FormData.append("file",file)
+                    const formData = new FormData();
+                    formData.append("file",file); 
+                    updateProfilePic(formData)                   
                 }       
+        }
 
+         const handleEditClick=()=>{
+                            editRef.current?.click();
+                            setName(user.name);
+                            setPhoneNumber(user.phone_number)
+                            setBio(user.bio||"")
+                        }  
+        const updateProfileHandler=()=>{
+
+        }
+
+        const ChangeResume = (e:ChangeEvent<HTMLInputElement>)=>{
+              const file=e.target.files?.[0]
+                if(file){
+                   if(file){
+                    if(file.type!=="application/pdf"){
+                        alert("please upload a pdf file");
+                        return;
+                    }
+                    const formData=new FormData()
+                    formData.append("file",file);
+                   }
+                                         
+                }
         }
 
         
@@ -41,6 +69,15 @@ const Info:React.FC<AccountProps>=({user,isYourAccount})=>{
 
                         </div>
                         {/* edit option for youtr account */}
+
+                            {
+                                isYourAccount && <><Button variant={"secondary"} size={"icon"} onClick={handleClick} className="absolute bottom-0 right-0 rounded-full h-10 w-10 shadow-lg"><Camera size={18} /></Button>
+
+                                <input type="file" className="hidden" accept="image/*" ref={inputRef} onChange={changeHandler}></input>
+
+                                    
+                            </>
+                            }
                     </div>
                 </div>
             </div>
@@ -119,7 +156,6 @@ const Info:React.FC<AccountProps>=({user,isYourAccount})=>{
                                 {/* edit buttone */}
                             </div>
                         </div>}
-
                </div>
         </Card>
     </div>

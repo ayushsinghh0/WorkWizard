@@ -84,6 +84,7 @@ export interface ResumeAnalysisResponse {
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
     setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
     logoutUser : ()=>Promise<void>;
+    updateProfilePic : (formData:FormData)=>Promise<void>;
 
  }
 

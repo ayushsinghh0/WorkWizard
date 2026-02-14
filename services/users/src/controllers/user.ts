@@ -11,9 +11,9 @@ import { TryCatch } from "../utils/TryCatch.js"
 export const myProfile=TryCatch(async(req:AuthenticatedRequest,res,next)=>{
     const user=req.user;
 
-    res.json({
+    res.json(
         user
-    })
+    )
 })
 
 export const getUserProfile=TryCatch(async (req,res,next)=>{
@@ -85,7 +85,7 @@ export const updateProfilePic = TryCatch(async(req:AuthenticatedRequest,res)=>{
             throw new ErrorHandler(400,"no image file found");
         }
 
-        const oldPublicId=user.resume_public_id;
+        const oldPublicId=user.profile_pic_public_id;
 
         const fileBuffer = getBuffer(file);
 
@@ -97,9 +97,11 @@ export const updateProfilePic = TryCatch(async(req:AuthenticatedRequest,res)=>{
             buffer: fileBuffer.content,
             public_id: oldPublicId,
         })
-
+         if (!uploadResult?.url || !uploadResult?.public_id) {
+        throw new ErrorHandler(500, "Image upload failed");
+    }
         const [updatedUser]=await sql `
-        UPDATE users SET resume = ${uploadResult.url}, resume_public_id = ${uploadResult.public_id} WHERE user_id = ${user.user_id} RETURNING user_id,name,resume;`;
+        UPDATE users SET profile_pic = ${uploadResult.url}, profile_pic_public_id = ${uploadResult.public_id} WHERE user_id = ${user.user_id} RETURNING user_id,name,profile_pic;`;
 
         res.json({
             message:"profile pic updated",

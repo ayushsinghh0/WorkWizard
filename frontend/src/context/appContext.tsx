@@ -21,7 +21,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [btnLoading, setBtnLoading] = useState(false);
 
   const token=Cookies.get("token");
-
+     
   async function fetchUser(){
     try {
       const {data}=await axios.get(`${user_service}/api/user/me`,{
@@ -29,6 +29,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
           Authorization:`Bearer ${token}`,
         },
       });
+      console.log(data);
       setUser(data);
       setIsAuth(true);
     } catch (error) {
@@ -39,6 +40,41 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     }
 
   }
+
+  async function updateProfilePic(fromData:FormData) {
+    setLoading(true)
+    try {
+       
+      const {data} =await axios.put(`${user_service}/api/user/update/pic`,
+        fromData,
+          {
+            headers:{
+              Authorization: `Bearer ${token}`
+            }
+          }
+      ) 
+
+      toast.success(data.message);
+      fetchUser();
+    } catch (error:unknown) {
+    // toast.error(error.response.data.message)
+    if (axios.isAxiosError(error)) {
+                toast.error(
+                error.response?.data?.message || "Login failed"
+                );
+            } else {
+                toast.error("Login failed");
+            }
+
+
+    } finally {
+      setLoading(false);
+    }
+    
+  }
+
+
+
 
    async function logoutUser() {
     Cookies.set("token","");
@@ -62,7 +98,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setUser,
         setIsAuth,
         setLoading,
-        logoutUser
+        logoutUser,
+        updateProfilePic
       }}
     >
       {children}
