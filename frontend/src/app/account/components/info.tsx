@@ -17,7 +17,7 @@ const Info:React.FC<AccountProps>=({user,isYourAccount})=>{
         const [phonenumber,setPhoneNumber]=useState("");
         const [bio,setBio]=useState("");
 
-        const {updateProfilePic}=useAppData()
+        const {updateProfilePic,updateResume}=useAppData()
         
         const handleClick=()=>{
             inputRef.current?.click();
@@ -28,10 +28,14 @@ const Info:React.FC<AccountProps>=({user,isYourAccount})=>{
                 if(file){
                     const formData = new FormData();
                     formData.append("file",file); 
-                    updateProfilePic(formData)                   
+                    updateProfilePic(formData);
+
                 }       
         }
 
+        const handleResumeClick = ()=>{
+            resumeRef.current?.click()
+        }
          const handleEditClick=()=>{
                             editRef.current?.click();
                             setName(user.name);
@@ -52,6 +56,7 @@ const Info:React.FC<AccountProps>=({user,isYourAccount})=>{
                     }
                     const formData=new FormData()
                     formData.append("file",file);
+                    updateResume(formData)
                    }
                                          
                 }
@@ -154,6 +159,10 @@ const Info:React.FC<AccountProps>=({user,isYourAccount})=>{
 
                                 </div>
                                 {/* edit buttone */}
+
+l
+                                <Button variant={"outline"} size={"sm"} onClick={handleResumeClick} className="gap-2" >Update </Button>
+                                <input type="file" ref={resumeRef} className="hidden" accept="application/pdf" onChange={ChangeResume}/>
                             </div>
                         </div>}
                </div>

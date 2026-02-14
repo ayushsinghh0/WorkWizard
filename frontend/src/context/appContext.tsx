@@ -73,6 +73,38 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     
   }
 
+   async function updateResume(fromData:FormData) {
+    setLoading(true)
+    try {
+       
+      const {data} =await axios.put(`${user_service}/api/user/update/resume`,
+        fromData,
+          {
+            headers:{
+              Authorization: `Bearer ${token}`
+            }
+          }
+      ) 
+
+      toast.success(data.message);
+      fetchUser();
+    } catch (error:unknown) {
+    // toast.error(error.response.data.message)
+    if (axios.isAxiosError(error)) {
+                toast.error(
+                error.response?.data?.message || "Login failed"
+                );
+            } else {
+                toast.error("Login failed");
+            }
+
+
+    } finally {
+      setLoading(false);
+    }
+    
+  }
+
 
 
 
@@ -99,7 +131,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setIsAuth,
         setLoading,
         logoutUser,
-        updateProfilePic
+        updateProfilePic,
+        updateResume
       }}
     >
       {children}
