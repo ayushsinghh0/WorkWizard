@@ -86,6 +86,9 @@ export interface ResumeAnalysisResponse {
     logoutUser : ()=>Promise<void>;
     updateProfilePic : (formData:FormData)=>Promise<void>;
     updateResume : (formData:FormData)=>Promise<void>;
+        updateUser : (name:string,phoneNumber:string,bio:string)=>Promise<void>;
+
+    
 
  }
 

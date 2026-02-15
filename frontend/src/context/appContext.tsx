@@ -2,15 +2,14 @@
 
 import { AppContextType, AppProviderProps, User } from "@/type";
 import axios from "axios";
-import Cookies  from "js-cookie";
+import Cookies from "js-cookie";
 import { createContext, useContext, useEffect, useState } from "react";
-import toast, {Toaster} from "react-hot-toast"
+import toast, { Toaster } from "react-hot-toast";
 
 export const utils_service = "http://localhost:5001";
 export const auth_service = "http://localhost:5000";
-export const user_service="http://localhost:5002";
-export const job_service="http://localhost:5003"
-
+export const user_service = "http://localhost:5002";
+export const job_service = "http://localhost:5003";
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -20,105 +19,119 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [btnLoading, setBtnLoading] = useState(false);
 
-  const token=Cookies.get("token");
-     
-  async function fetchUser(){
+  const token = Cookies.get("token");
+
+  async function fetchUser() {
     try {
-      const {data}=await axios.get(`${user_service}/api/user/me`,{
-        headers:{
-          Authorization:`Bearer ${token}`,
+      const { data } = await axios.get(`${user_service}/api/user/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       });
       console.log(data);
       setUser(data);
       setIsAuth(true);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       setIsAuth(false);
     } finally {
       setLoading(false);
     }
-
   }
 
-  async function updateProfilePic(fromData:FormData) {
-    setLoading(true)
+  async function updateProfilePic(fromData: FormData) {
+    setLoading(true);
     try {
-       
-      const {data} =await axios.put(`${user_service}/api/user/update/pic`,
+      const { data } = await axios.put(
+        `${user_service}/api/user/update/pic`,
         fromData,
-          {
-            headers:{
-              Authorization: `Bearer ${token}`
-            }
-          }
-      ) 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
       toast.success(data.message);
       fetchUser();
-    } catch (error:unknown) {
-    // toast.error(error.response.data.message)
-    if (axios.isAxiosError(error)) {
-                toast.error(
-                error.response?.data?.message || "Login failed"
-                );
-            } else {
-                toast.error("Login failed");
-            }
-
-
+    } catch (error: unknown) {
+      // toast.error(error.response.data.message)
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Login failed");
+      } else {
+        toast.error("Login failed");
+      }
     } finally {
       setLoading(false);
     }
-    
   }
 
-   async function updateResume(fromData:FormData) {
-    setLoading(true)
+  async function updateResume(fromData: FormData) {
+    setLoading(true);
     try {
-       
-      const {data} =await axios.put(`${user_service}/api/user/update/resume`,
+      const { data } = await axios.put(
+        `${user_service}/api/user/update/resume`,
         fromData,
-          {
-            headers:{
-              Authorization: `Bearer ${token}`
-            }
-          }
-      ) 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
       toast.success(data.message);
       fetchUser();
-    } catch (error:unknown) {
-    // toast.error(error.response.data.message)
-    if (axios.isAxiosError(error)) {
-                toast.error(
-                error.response?.data?.message || "Login failed"
-                );
-            } else {
-                toast.error("Login failed");
-            }
-
-
+    } catch (error: unknown) {
+      // toast.error(error.response.data.message)
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Login failed");
+      } else {
+        toast.error("Login failed");
+      }
     } finally {
       setLoading(false);
     }
-    
   }
 
+  async function updateUser(name: string, phoneNumber: string, bio: string) {
+    setLoading(true);
 
+    try {
+      const { data } = await axios.put(
+        `${user_service}/api/user/update/profile`,
+        {
+          name,
+          phoneNumber,
+          bio,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
+      toast.success(data.message);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Login failed");
+      } else {
+        toast.error("Login failed");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
 
-   async function logoutUser() {
-    Cookies.set("token","");
+  async function logoutUser() {
+    Cookies.set("token", "");
     setUser(null);
     setIsAuth(false);
-    toast.success("Logges Out successfully")
-
+    toast.success("Logges Out successfully");
   }
-  useEffect(()=>{
+  useEffect(() => {
     fetchUser();
-  },[])
-
+  }, []);
 
   return (
     <AppContext.Provider
@@ -132,20 +145,20 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         setLoading,
         logoutUser,
         updateProfilePic,
-        updateResume
+        updateResume,
+        updateUser,
       }}
     >
       {children}
-      <Toaster/>
+      <Toaster />
     </AppContext.Provider>
   );
 };
 
-
-export const useAppData=():AppContextType=>{
-    const context = useContext(AppContext)
-    if(!context){
-        throw new Error("useAppData must be used within App provider")
-    }
-    return context;
-}
+export const useAppData = (): AppContextType => {
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error("useAppData must be used within App provider");
+  }
+  return context;
+};
