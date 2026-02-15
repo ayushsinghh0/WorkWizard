@@ -39,6 +39,10 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     }
   }
 
+
+
+
+  
   async function updateProfilePic(fromData: FormData) {
     setLoading(true);
     try {
@@ -65,6 +69,11 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       setLoading(false);
     }
   }
+
+
+
+
+
 
   async function updateResume(fromData: FormData) {
     setLoading(true);
@@ -93,8 +102,13 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     }
   }
 
+
+
+
+
+
   async function updateUser(name: string, phoneNumber: string, bio: string) {
-    setLoading(true);
+    setBtnLoading(true);
 
     try {
       const { data } = await axios.put(
@@ -119,9 +133,38 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         toast.error("Login failed");
       }
     } finally {
-      setLoading(false);
+      setBtnLoading(false);
     }
   }
+
+
+
+
+
+   async function addSkill(skill:string) {
+         setBtnLoading(true);
+        try {
+          const {data}= await axios.post(`${user_service}/api/user/skills/add`,{skillName:skill},{
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+          toast.success(data.message);
+
+        } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Login failed");
+      } else {
+        toast.error("Login failed");
+      }
+    } finally {
+      setBtnLoading(false);
+    }
+  }
+
+
+
+
 
   async function logoutUser() {
     Cookies.set("token", "");
@@ -147,6 +190,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         updateProfilePic,
         updateResume,
         updateUser,
+        addSkill
       }}
     >
       {children}
