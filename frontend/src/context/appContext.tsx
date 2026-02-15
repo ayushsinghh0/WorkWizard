@@ -141,7 +141,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
 
 
-   async function addSkill(skill:string) {
+   async function addSkill(skill:string,setSkill:React.Dispatch<React.SetStateAction<string>>) {
          setBtnLoading(true);
         try {
           const {data}= await axios.post(`${user_service}/api/user/skills/add`,{skillName:skill},{
@@ -150,6 +150,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
             }
           })
           toast.success(data.message);
+          setSkill("")
 
         } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -161,6 +162,31 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       setBtnLoading(false);
     }
   }
+
+
+  
+
+   async function removeSkill(skill:string) {
+        
+        try {
+          const {data}= await axios.put(`${user_service}/api/user/skill/delete`,{skillName:skill},{
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          })
+          toast.success(data.message);
+        
+        } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Login failed");
+      } else {
+        toast.error("Login failed");
+      }
+    } finally {
+      setBtnLoading(false);
+    }
+  }
+
 
 
 
@@ -190,7 +216,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         updateProfilePic,
         updateResume,
         updateUser,
-        addSkill
+        addSkill,
+        removeSkill
       }}
     >
       {children}

@@ -87,7 +87,8 @@ export interface ResumeAnalysisResponse {
     updateProfilePic : (formData:FormData)=>Promise<void>;
     updateResume : (formData:FormData)=>Promise<void>;
         updateUser : (name:string,phoneNumber:string,bio:string)=>Promise<void>;
-         addSkill:(skill:string)=>Promise<void>;
+         addSkill:(skill:string,setSkill:React.Dispatch<React.SetStateAction<string>>)=>Promise<void>;
+    removeSkill:(skill:string)=>Promise<void>;
 
     
 
