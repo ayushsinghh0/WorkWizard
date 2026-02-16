@@ -4,6 +4,7 @@ import { useAppData } from "@/context/appContext";
 import React, { use } from "react";
 import Info from "./components/info";
 import Skills from "./components/skills";
+import Company from "./components/company";
 
 
 const AccountPage = () =>{
@@ -18,6 +19,9 @@ const AccountPage = () =>{
                 <Info user={user} isYourAccount={true}/>
                 {
                     user.role=="jobseeker" && <Skills user={user} isYourAccount={true}/>
+                }
+                {
+                    user.role=="recruiter" && <Company/>
                 }
            </div>}</>
 }
