@@ -6,9 +6,13 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { Loading } from "@/components/loading";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import { Building2, Eye, Globe, Link, Plus, Trash2 } from "lucide-react";
+import { Briefcase, Building2, Eye, FileText, Globe, Image, Link, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Company as CompanyType } from "@/type";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+
 
 const Company = () => {
   const { loading } = useAppData();
@@ -62,7 +66,7 @@ const Company = () => {
     try {
       setBtnLoading(true);
       const { data } = await axios.post(
-        `${job_service}/api/job/add/company`,
+        `${job_service}/api/job/company/new`,
         formData,
         {
           headers: {
@@ -129,7 +133,7 @@ const Company = () => {
             </CardDescription>
 
             {companies.length < 3 && (
-              <Button onAbort={openDialog} className="gap-2">
+              <Button onClick={openDialog} className="gap-2">
                 <Plus size={18}> Add Company</Plus>
               </Button>
             )}
@@ -212,6 +216,49 @@ const Company = () => {
           )}
         </div>
       </Card>
+      {/* Add company Dialog */}
+      <Dialog>
+           
+            <DialogTrigger asChild>
+                <Button className="hidden" ref ={addRef} ></Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[550px]">
+                    <DialogHeader>
+                        <DialogTitle className="text-2xl flex items-center gap-2">
+                            <Building2 className="text-blue-600"/>
+                            Add new Company
+                        </DialogTitle>
+                    </DialogHeader>
+
+                    <div className="space-y-5 py-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="name" className="text-sm font-medium flex items-center gap-2"><Briefcase size={16}/>Company Name</Label>
+                            <Input id="name" type="text" placeholder="ENter Company name" className="h-11" value={name} onChange={e=>setName(e.target.value)} />
+
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="description" className="text-sm font-medium flex items-center gap-2"><FileText size={16}/>Description</Label>
+                            <Input id="description" type="text" placeholder="Enter  Your Description" className="h-11" value={description} onChange={e=>setDescription(e.target.value)} />
+
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="website" className="text-sm font-medium flex items-center gap-2"><Globe size={16}/>website</Label>
+                            <Input id="website" type="text" placeholder="Enter  Your website" className="h-11" value={website} onChange={e=>setWebsite(e.target.value)} />
+
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="logo" className="text-sm font-medium flex items-center gap-2"><Image size={16}/>Company Logo</Label>
+                            <Input id="logo" type="file" accept="image/*" className="h-11 cursor-pointer"  onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setLogo(e.target.files?.[0] || null)} />
+
+                        </div>
+                    </div>
+
+                    <DialogFooter >
+                        <Button disabled={btnLoading} onClick={addCompanyHandler} className="w-full h-11">{btnLoading ? "Adding Company..":"Add company"}</Button>
+                    </DialogFooter>
+                </DialogContent>
+       
+      </Dialog>
     </div>
   );
 };
