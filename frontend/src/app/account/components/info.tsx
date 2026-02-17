@@ -165,7 +165,7 @@ const Info:React.FC<AccountProps>=({user,isYourAccount})=>{
                                 </div>
                                 {/* edit buttone */}
 
-l
+
                                 <Button variant={"outline"} size={"sm"} onClick={handleResumeClick} className="gap-2" >Update </Button>
                                 <input type="file" ref={resumeRef} className="hidden" accept="application/pdf" onChange={ChangeResume}/>
                             </div>

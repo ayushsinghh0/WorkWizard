@@ -13,7 +13,6 @@ import {
   FileText,
   Globe,
   Image,
-  Link,
   Plus,
   Trash2,
 } from "lucide-react";
@@ -29,6 +28,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 const Company = () => {
   const { loading } = useAppData();
@@ -117,6 +117,8 @@ const Company = () => {
           },
         );
         toast.success(data.message);
+        fetchCompanies();
+
       } catch (error) {
         if (axios.isAxiosError(error)) {
           toast.error(error.response?.data?.message || "Login failed");
@@ -239,7 +241,7 @@ const Company = () => {
         <DialogTrigger asChild>
           <Button className="hidden" ref={addRef}></Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[550px]">
+        <DialogContent className="sm: max-w-[550px]">
           <DialogHeader>
             <DialogTitle className="text-2xl flex items-center gap-2">
               <Building2 className="text-blue-600" />
@@ -264,7 +266,7 @@ const Company = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
-            </div>
+            </div> 
             <div className="space-y-2">
               <Label
                 htmlFor="description"
