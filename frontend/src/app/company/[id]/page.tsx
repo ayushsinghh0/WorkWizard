@@ -11,9 +11,12 @@ import { Loading } from "@/components/loading";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Briefcase, Globe, Plus } from "lucide-react";
+import { Briefcase, Building2, CheckCircle, Clock, DollarSign, Eye, FileText, Globe, Laptop, MapPin, Plus, Users, XCircle } from "lucide-react";
 import toast from "react-hot-toast";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 
 const CompanyPage = () =>{
@@ -36,7 +39,7 @@ const CompanyPage = () =>{
     const [role,setrole]=useState("")
     const [salary,setsalary]=useState("")
     const [location,setlocation]=useState("")
-    const [opening,setopening]=useState("")
+    const [openings,setopenings]=useState("")
     const [job_type,setjob_type]=useState("")
     const [work_location,setwork_location]=useState("")
     const [is_active,setis_active]=useState(true)
@@ -48,7 +51,7 @@ const CompanyPage = () =>{
         setrole("");
         setsalary("");
         setlocation("");
-        setopening("");
+        setopenings("");
         setjob_type("");
         setwork_location("")
         setis_active(true)
@@ -59,7 +62,7 @@ const CompanyPage = () =>{
         try{
             const jobData = {
                 title,description,role,salary:Number(salary),
-                location,openings:Number(opening),
+                location,openings:Number(openings),
                 job_type,work_location,company_id:id,
             };
             await axios.post(`${job_service}/api/job/new`,jobData,{
@@ -143,7 +146,7 @@ const CompanyPage = () =>{
         setrole(job.role);
         setsalary(String(job.salary || ""));
         setlocation(job.location||"");
-        setopening(String(job.openings));
+        setopenings(String(job.openings));
         setjob_type(job.job_type);
         setwork_location(job.work_location);
         setis_active(job.is_active);
@@ -165,7 +168,7 @@ const CompanyPage = () =>{
         try {
              const updateData = {
                 title,description,role,salary:Number(salary),
-                location,openings:Number(opening),
+                location,openings:Number(openings),
                 job_type,work_location,is_active,
             };
 
@@ -252,11 +255,217 @@ const CompanyPage = () =>{
                                     </DialogTitle>
                                 </DialogHeader>
 
-                                <div className="">
-                                    
+                               <div className="space-y-5 py-4">
+                                    <div className="space-y-2">
+                                    <Label
+                                        htmlFor="title"
+                                        className="text-sm font-medium flex items-center gap-2"
+                                    >
+                                        <Briefcase size={16} />
+                                        Job title
+                                    </Label>
+                                    <Input
+                                        id="title"
+                                        type="text"
+                                        placeholder="ENter  job title name"
+                                        className="h-11"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                    />
+                                    </div> 
+                                    <div className="space-y-2">
+                                    <Label
+                                        htmlFor="description"
+                                        className="text-sm font-medium flex items-center gap-2"
+                                    >
+                                        <FileText size={16} />
+                                        Description
+                                    </Label>
+                                    <Input
+                                        id="description"
+                                        type="text"
+                                        placeholder="Enter  Your Description"
+                                        className="h-11"
+                                        value={description}
+                                        onChange={(e) => setdescription(e.target.value)}
+                                    />
+                                    </div>
+                                    <div className="space-y-2">
+                                    <Label
+                                        htmlFor="role"
+                                        className="text-sm font-medium flex items-center gap-2"
+                                    >
+                                        <Building2 size={16} />
+                                        Role/department
+                                    </Label>
+                                    <Input
+                                        id="role"
+                                        type="text"
+                                        placeholder="Enter  job role"
+                                        className="h-11"
+                                        value={role}
+                                        onChange={(e) => setrole(e.target.value)}
+                                    />
+                                    </div>
+                                    <div className="space-y-2">
+                                    <Label
+                                        htmlFor="salary"
+                                        className="text-sm font-medium flex items-center gap-2"
+                                    >
+                                        <DollarSign size={16} />
+                                        salary
+                                    </Label>
+                                    <Input
+                                        id="salary"
+                                         type="text"
+                                        placeholder="Enter  salary"
+                                        className="h-11"
+                                        value={salary}
+                                        onChange={(e) => setsalary(e.target.value)}
+                                        
+                                    />
+                                    </div>
+
+                                     <div className="space-y-2">
+                                    <Label
+                                        htmlFor="openings"
+                                        className="text-sm font-medium flex items-center gap-2"
+                                    >
+                                        <Users size={16} />
+                                        openings
+                                    </Label>
+                                    <Input
+                                        id="openings"
+                                         type="text"
+                                        placeholder="Enter  openings"
+                                        className="h-11"
+                                        value={openings}
+                                        onChange={(e) => setopenings(e.target.value)}
+                                        
+                                    />
+                                    </div>
+                                    <div className="space-y-2">
+                                    <Label
+                                        htmlFor="location"
+                                        className="text-sm font-medium flex items-center gap-2"
+                                    >
+                                        <MapPin size={16} />
+                                        location
+                                    </Label>
+                                    <Input
+                                        id="location"
+                                         type="text"
+                                        placeholder="Enter  location"
+                                        className="h-11 cursor-pointer"
+                                        value={location}
+                                        onChange={(e) => setlocation(e.target.value)}
+                                        
+                                    />
+                                    </div>
+
+                                    <div className="grid md:grid-cols-2 gap-4 ">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="job_type" className="text-sm font-medium flex items-center gap-1">
+                                                <Clock size={16} /> Job type
+                                            </Label>
+                                            <Select value={job_type} onValueChange={setjob_type} >
+                                                <SelectTrigger className="h-11">
+                                                    <SelectValue placeholder="select job type"/>
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="Full-time">Full-time</SelectItem>
+                                                    <SelectItem value="Part-time">Part-time</SelectItem>
+                                                    <SelectItem value="Contract">Contract</SelectItem>
+                                                    <SelectItem value="Internship">Internship</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+
+                                          <div className="space-y-2">
+                                            <Label htmlFor="work_location" className="text-sm font-medium flex items-center gap-1">
+                                                <Laptop size={16} /> Work Location
+                                            </Label>
+                                            <Select value={work_location} onValueChange={setwork_location} >
+                                                <SelectTrigger className="h-11">
+                                                    <SelectValue placeholder="select work_location"/>
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="On-site">On-site</SelectItem>
+                                                    <SelectItem value="Remote">Remote</SelectItem>
+                                                    <SelectItem value="Hybrid">Hybrid</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <DialogFooter>
+                                    <DialogClose asChild>
+                                        <Button ref={addModalRef} variant={"outline"}>
+                                            Cancel
+                                        </Button>
+                                    </DialogClose>
+                                    <Button disabled={btnLoading} onClick={addJobHandler} className="gap-2">{btnLoading ?"Posting Job...":"Post Job" }</Button>
+                                </DialogFooter>
                             </DialogContent>
                             </>}
+
+                            <div className="p-6" >
+                                {company.jobs && company.jobs.length>0  ? <div className="space-y-4">
+                                    {company.jobs.map((j)=>(<div key={j.job_id} className="p-6 rounded-lg border-2 hover:border-blue-500 transition-all bg-background ">
+                                        <div className="flex items-start justify-between gap-4 flex-wrap">
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-center gap-3 mb-3 flex-wrap">
+                                                    <h3 className="text-xl font-semibold">
+                                                        {j.title}
+                                                    </h3>
+
+                                                    <span className={`text-xs px-3 py-1 rounded-full flex items-center gap-1
+                                                         ${j.is_active ? "bg-green-100  dark:bg-green-900/30 text-green-600":"bg-gray-100 dark:bg-gray-800 text-gray-600"}`}>
+                                                            {j.is_active ? <CheckCircle size={14} />:<XCircle size={14}/>}{j.is_active?"Active":"InActive"}
+                                                         </span>
+                                                    </div>
+
+                                                    <div className="flex flex-wrap gap-6 gap-y-2 text-sm">
+                                                        <div className=" flex items-center gap-2 opacity-70">
+                                                            <Building2 size={16}/>
+                                                            <span>{j.role}</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-2 opacity-70">
+                                                            <DollarSign size={16} />
+                                                            <span>{j.salary ? `RS:  ${j.salary.toLocaleString()}` : "Not Disclosed"}</span>
+                                                        </div>
+                                                        
+
+                                                        <div className="flex items-center gap-2 opacity-70">
+                                                            <MapPin size={16}/>
+                                                            <span>{j.location }</span>
+                                                            </div>
+
+                                                        <div className="flex items-center gap-2 opacity-70">
+                                                            <Laptop size={16}/>
+                                                            <span>{j.work_location }  {j.job_type }</span>
+                                                            </div>
+
+                                                        <div className="flex items-center gap-2 opacity-70">
+                                                            <Users size={16}/>
+                                                            <span>{j.openings }  openings</span>
+                                                            </div>
+                                                </div>
+                                        </div>
+
+                                        <div  className="flex items-center gap-2">
+                                            <Link href={`/jobs/${j.job_id}`}>
+                                            <Button variant={"outline"} size={"sm"} className="gap-2" >
+                                                <Eye size={16}/>View
+                                            </Button>
+                                            </Link>
+                                        </div>
+                                        </div>
+                                        </div>))}
+
+                                </div>:<></>}
+                            </div>
                     </Card>
 
                 </Dialog>

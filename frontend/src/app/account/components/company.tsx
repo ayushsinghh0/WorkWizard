@@ -6,10 +6,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { Loading } from "@/components/loading";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import {
-  Briefcase,
-  Building2,
-  Eye,
+import { Briefcase, Building2, Eye,
   FileText,
   Globe,
   Image,
@@ -169,7 +166,7 @@ const Company = () => {
                   className="flex items-center gap-4 p-4 rounded-lg border-2 hover:border-blue-500 transition-all bg-background"
                 >
                   <div className="h-16 w-16 rounded-full border-2 overflow-hidden shrink-0 bg-background ">
-                    <img
+                    <img 
                       src={c.logo}
                       alt=""
                       className="w-full h-full object-cover"
