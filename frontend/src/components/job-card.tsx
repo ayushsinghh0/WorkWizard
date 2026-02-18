@@ -50,13 +50,15 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
           </div>
 
           <Link href={`/company/${job.company_id}`} className="shrink-0">
-            <div className="w-14 h-14 rounded-xl border-2 overflow-hidden hover:scale-105 transition-transform bg-background">
-              <img src = {job.company_logo}
-                alt=""
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </Link>
+  <div className="w-12 h-12 rounded-lg border bg-muted/30 p-1 flex items-center justify-center overflow-hidden hover:scale-105 transition-transform">
+    <img
+      src={job.company_logo}
+      alt={job.company_name}
+      className="w-full h-full object-contain"
+    />
+  </div>
+</Link>
+
         </div>
 
         <div className="space-y-2">
