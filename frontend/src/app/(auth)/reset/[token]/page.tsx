@@ -5,12 +5,13 @@ import { Label } from "@/components/ui/label";
 import { auth_service, useAppData } from "@/context/appContext";
 import axios from "axios";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
 
-const ForgotPage = () => {
-  const [email, setemail] = useState("");
+const ResetPage = () => {
+  const { token } = useParams();
+  const [password, setPassword] = useState("");
   const [btnLoading, setbtnLoading] = useState(false);
   const { isAuth } = useAppData();
 
@@ -20,18 +21,21 @@ const ForgotPage = () => {
     e.preventDefault();
     setbtnLoading(true);
     try {
-      const { data } = await axios.post(`${auth_service}/api/auth/forget`, { 
-        email,
-      });
+      const { data } = await axios.post(
+        `${auth_service}/api/auth/reset/${token}`,
+        {
+          password,
+        }
+      );
 
       toast.success(data.message);
-      setemail("");
-    } catch (error) {
+      setPassword("");
+    } catch (error:unknown) {
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data?.message || "Login failed");
       } else {
         toast.error("Login failed");
-      }      
+      }
     } finally {
       setbtnLoading(false);
     }
@@ -40,19 +44,19 @@ const ForgotPage = () => {
     <div className="mt-20 md:mt-5 z-0">
       <div className="md:w-1/3 border border-gray-400 rounded-lg p-8 flex flex-col w-full relative shadow-md m-auto">
         <h2 className="mb-1">
-          <span className="text-3xl">Forgot Password</span>
+          <span className="text-3xl">Reset Password</span>
         </h2>
         <form
           onSubmit={submitHandler}
           className="flex flex-col justify-between mt-3"
         >
           <div className="grid w-full max-w-sm items-center gap-1.5 ml-1">
-            <Label>Email</Label>
+            <Label>Password</Label>
             <Input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setemail(e.target.value)}
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
 
@@ -76,4 +80,4 @@ const ForgotPage = () => {
   );
 };
 
-export default ForgotPage;
+export default ResetPage;
