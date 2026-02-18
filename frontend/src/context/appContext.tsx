@@ -1,6 +1,6 @@
 "use client";
 
-import { AppContextType, AppProviderProps, User } from "@/type";
+import { AppContextType, Application, AppProviderProps, User } from "@/type";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -18,6 +18,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
   const [loading, setLoading] = useState(true);
   const [btnLoading, setBtnLoading] = useState(false);
+  const [applications,setApplications] = useState<Application[]|null> (null);
 
   const token = Cookies.get("token");
 
@@ -198,8 +199,50 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setIsAuth(false);
     toast.success("Logges Out successfully");
   }
-  useEffect(() => {
+
+
+  async function applyJob(job_id:number) {
+    setBtnLoading(true)
+    try {
+      const {data} = await axios.post(`${user_service}/api/user/apply/job`,{job_id},{
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      })
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Login failed");
+      } else {
+        toast.error("Login failed");
+      }    }
+      finally{
+        setBtnLoading(false)
+      }
+      
+  }
+
+
+
+  async function fetchApplications() {
+    try {
+      const {data}=await axios.get(`${user_service}/api/user/application/all`,{
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      })
+
+      setApplications(data)
+    } catch (error) {
+      console.log(error)
+      
+    }
+    
+  }
+
+   useEffect(() => {
     fetchUser();
+    fetchApplications();
+    
   }, []);
 
   return (
@@ -217,7 +260,11 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         updateResume,
         updateUser,
         addSkill,
-        removeSkill
+        removeSkill,
+         applyJob,
+         applications,
+         fetchApplications
+
       }}
     >
       {children}

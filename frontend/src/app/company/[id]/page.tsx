@@ -172,7 +172,7 @@ const CompanyPage = () =>{
                 job_type,work_location,is_active,
             };
 
-            axios.put(`${job_service}/api/job/${selectedJob}`,updateData,{
+            axios.put(`${job_service}/api/job/${selectedJob.job_id}`,updateData,{
                 headers:{
                     Authorization: `Bearer ${token}`
                 }

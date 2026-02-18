@@ -86,10 +86,13 @@ export interface ResumeAnalysisResponse {
     logoutUser : ()=>Promise<void>;
     updateProfilePic : (formData:FormData)=>Promise<void>;
     updateResume : (formData:FormData)=>Promise<void>;
-        updateUser : (name:string,phoneNumber:string,bio:string)=>Promise<void>;
-         addSkill:(skill:string,setSkill:React.Dispatch<React.SetStateAction<string>>)=>Promise<void>;
-    removeSkill:(skill:string)=>Promise<void>;
-
+    updateUser : (name:string,phoneNumber:string,bio:string)=>Promise<void>;
+    addSkill : (skill:string,setSkill:React.Dispatch<React.SetStateAction<string>>)=>Promise<void>;
+    removeSkill : (skill:string)=>Promise<void>;
+    applyJob : (job_id:number)=>Promise<void>;
+    applications:Application[]|null;
+    fetchApplications : ()=>Promise<void>;
+   
     
 
  }
@@ -117,6 +120,8 @@ export interface ResumeAnalysisResponse {
         role:string;
         work_location:'On-site'|'Remote'|'Hybrid';
         company_id:number;
+        company_name:string;
+        company_logo:string;
         posted_by_recruiter_id:number;
         created_at:string;
         is_active:boolean;

@@ -17,7 +17,7 @@ const LoginPage = () =>{
     const [password,setPassword] = useState("");
     const [btnLoading,setBtnLoading]=useState(false);
 
-    const {isAuth,setUser,loading,setIsAuth}=useAppData();
+    const {isAuth,setUser,loading,setIsAuth ,fetchApplications}=useAppData();
 
     if(loading) return <Loading/>
 
@@ -42,6 +42,7 @@ const LoginPage = () =>{
             });
             setUser(data.userObject);
             setIsAuth(true);
+            fetchApplications();
 
         } catch (error:unknown) {
                     
