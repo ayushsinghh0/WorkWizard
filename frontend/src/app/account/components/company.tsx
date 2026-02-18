@@ -51,6 +51,8 @@ const Company = () => {
   };
   const token = Cookies.get("token");
 
+
+  const [companLoading,setCompanyLoading]=useState(true)
   async function fetchCompanies() {
     try {
       const { data } = await axios.get(`${job_service}/api/job/company/all`, {
@@ -61,7 +63,9 @@ const Company = () => {
       setCompanies(data);
     } catch (error) {
       console.log(error);
-    }
+    } finally{
+    setCompanyLoading(false);
+  }
   }
 
   async function addCompanyHandler() {
@@ -157,7 +161,7 @@ const Company = () => {
           </div>
         </div>
 
-        <div className="p-6">
+       {companLoading ? <Loading/>: <div className="p-6">
           {companies.length > 0 ? (
             <div className="grid gap-4">
               {companies.map((c) => (
@@ -231,7 +235,7 @@ const Company = () => {
               </div>
             </>
           )}
-        </div>
+        </div>}
       </Card>
       {/* Add company Dialog */}
       <Dialog>
