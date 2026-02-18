@@ -11,7 +11,7 @@ import { Loading } from "@/components/loading";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Briefcase, Building2, CheckCircle, Clock, DollarSign, Eye, FileText, Globe, Laptop, MapPin, Plus, Users, XCircle } from "lucide-react";
+import { Briefcase, Building2, CheckCircle, Clock, DollarSign, Eye, FileText, Globe, Laptop, MapPin, Pencil, Plus, Users, XCircle } from "lucide-react";
 import toast from "react-hot-toast";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -139,7 +139,7 @@ const CompanyPage = () =>{
     }
 
 
-    const updateOpenUpdateModal=(job:Job)=>{
+    const handleOpenUpdateModal=(job:Job)=>{
         setSelectedJob(job);
         setTitle(job.title);
         setdescription(job.description);
@@ -458,20 +458,245 @@ const CompanyPage = () =>{
                                             <Link href={`/jobs/${j.job_id}`}>
                                             <Button variant={"outline"} size={"sm"} className="gap-2" >
                                                 <Eye size={16}/>View
-                                            </Button>
+                                            </Button >
                                             </Link>
+
+                                            {
+                                                isRecruiterOwner && <>
+                                                <Button onClick={()=>handleOpenUpdateModal(j)}
+                                                    variant={"outline"}
+                                                size={"sm"}
+                                                className="gap-2"
+                                                 >
+                                                     <Pencil size={16} />
+                                                         Edit
+                                                 </Button>
+                                                    </>
+                                            }
                                         </div>
                                         </div>
                                         </div>))}
 
-                                </div>:<></>}
+                                </div>:<>
+                                <div className="text-center py-12">
+                      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
+                        <Briefcase size={32} className="opacity-40" />
+                      </div>
+                      <p className="text-base opacity-70 mb-2">
+                        No jobs postet yet
+                      </p>
+                    </div>
+                    </>}
                             </div>
                     </Card>
 
                 </Dialog>
-            </div>
-        }
-            
+           <Dialog
+            open={isUpdatedModalOpen}
+            onOpenChange={setIsUpdatedModalOpen}
+          >
+            <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-2xl flex items-center gap-2">
+                  Update Job
+                </DialogTitle>
+              </DialogHeader>
+
+              <div className="space-y-5 py-4">
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="title"
+                    className="text-sm font-medium flex items-center gap-2"
+                  >
+                    <Briefcase size={16} /> Job Title
+                  </Label>
+                  <Input
+                    id="title"
+                    type="text"
+                    placeholder="Enter Job title"
+                    className="h-11"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="description"
+                    className="text-sm font-medium flex items-center gap-2"
+                  >
+                    <FileText size={16} /> Description
+                  </Label>
+                  <Input
+                    id="description"
+                    type="text"
+                    placeholder="Enter Description"
+                    className="h-11"
+                    value={description}
+                    onChange={(e) => setdescription(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="role"
+                    className="text-sm font-medium flex items-center gap-2"
+                  >
+                    <Building2 size={16} /> Role/Department
+                  </Label>
+                  <Input
+                    id="role"
+                    type="text"
+                    placeholder="Enter Job Role"
+                    className="h-11"
+                    value={role}
+                    onChange={(e) => setrole(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="salary"
+                    className="text-sm font-medium flex items-center gap-2"
+                  >
+                    <DollarSign size={16} /> Salary
+                  </Label>
+                  <Input
+                    id="salary"
+                    type="number"
+                    placeholder="Enter salary"
+                    className="h-11 cursor-pointer"
+                    value={salary}
+                    onChange={(e) => setsalary(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="openings"
+                    className="text-sm font-medium flex items-center gap-2"
+                  >
+                    <Users size={16} /> Openings
+                  </Label>
+                  <Input
+                    id="openings"
+                    type="number"
+                    placeholder="Eg. 5"
+                    className="h-11 cursor-pointer"
+                    value={openings}
+                    onChange={(e) => setopenings(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="location"
+                    className="text-sm font-medium flex items-center gap-2"
+                  >
+                    <MapPin size={16} /> Location
+                  </Label>
+                  <Input
+                    id="location"
+                    type="text"
+                    placeholder="Enter location"
+                    className="h-11 cursor-pointer"
+                    value={location}
+                    onChange={(e) => setlocation(e.target.value)}
+                  />
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="job_type"
+                      className="text-sm font-medium flex items-center gap-1"
+                    >
+                      <Clock size={16} /> Job Type
+                    </Label>
+                    <Select value={job_type} onValueChange={setjob_type}>
+                      <SelectTrigger className="h-11">
+                        <SelectValue placeholder="Select job type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Full-time">Full-time</SelectItem>
+                        <SelectItem value="Part-time">Part-time</SelectItem>
+                        <SelectItem value="Contract">Contract</SelectItem>
+                        <SelectItem value="Internship">Internship</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="work_location"
+                      className="text-sm font-medium flex items-center gap-1"
+                    >
+                      <Laptop size={16} /> Work Location
+                    </Label>
+                    <Select
+                      value={work_location}
+                      onValueChange={setwork_location}
+                    >
+                      <SelectTrigger className="h-11">
+                        <SelectValue placeholder="Select Work Location" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="On-site">On-site</SelectItem>
+                        <SelectItem value="Remote">Remote</SelectItem>
+                        <SelectItem value="Hybrid">Hybrid</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="update-is_active"
+                      className="text-sm font-medium flex items-center gap-2"
+                    >
+                      {is_active ? (
+                        <CheckCircle size={16} className="text-green-600" />
+                      ) : (
+                        <XCircle size={16} className="text-gray-50" />
+                      )}
+                    </Label>
+
+                    <Select
+                      value={is_active ? "true" : "false"}
+                      onValueChange={(value) => setis_active(value === "true")}
+                    >
+                      <SelectTrigger className="h-11">
+                        <SelectValue placeholder="select status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="true">Active</SelectItem>
+                        <SelectItem value="false">Inactive</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button ref={addModalRef} variant={"outline"}>
+                    Cancel
+                  </Button>
+                </DialogClose>
+                <Button
+                  disabled={btnLoading}
+                  onClick={updateJobHandler}
+                  className="gap-2"
+                >
+                  {btnLoading ? "Updating job..." : "Update Job"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
+      }
     </div>
-}
-export default CompanyPage
+  ;
+};
+
+export default CompanyPage;
+
