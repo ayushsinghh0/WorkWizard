@@ -88,6 +88,7 @@ export const registerUser = TryCatch( async (req,res,next)=>{
 
 export const loginUser = TryCatch(async(req,res,next)=>{
     const {email,password}=req.body;
+   
 
     if(!email || !password){
         throw new ErrorHandler(400,"please fill all details");

@@ -31,7 +31,8 @@ import { job_service, useAppData } from "@/context/appContext";
 import { Loading } from "@/components/loading";
 
 const JobPage = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id as string;   
   const { user, applyJob, applications, btnLoading } = useAppData();
   const router = useRouter();
 

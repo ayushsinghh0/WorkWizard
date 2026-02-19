@@ -33,6 +33,8 @@ const LoginPage = () =>{
             const {data}= await axios.post(`${auth_service}/api/auth/login`,{
                 email,password
             });
+            console.log({ email, password });
+
 
             toast.success(data.message);
             Cookies.set("token",data.token,{

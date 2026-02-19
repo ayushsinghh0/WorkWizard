@@ -12,7 +12,6 @@ const Home = ()=>{
   if(loading) return <Loading/>
 
   return <div> 
-    
     <Hero/>
     <CarrerGuide/>
     <ResumeAnalyzer/>
