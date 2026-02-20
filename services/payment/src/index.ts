@@ -2,6 +2,7 @@ import express from "express"
 import dotenv from "dotenv"
 import Razorpay from "razorpay"
 import cors from "cors"
+import paymentRoutes from "./routes/payment"
 
 
 dotenv.config()
@@ -12,3 +13,17 @@ export const instance=new Razorpay(
 
 }
 )
+
+
+
+
+
+const app=express()
+app.use(express.json());
+
+app.use("/api/payment",paymentRoutes);
+
+app.listen(process.env.PORT,()=>{
+    console.log(`Payment service is running on ${process.env.PORT}`);
+});
+
