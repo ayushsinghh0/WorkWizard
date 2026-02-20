@@ -7,7 +7,7 @@ import { useAppData } from "@/context/appContext";
 import { AccountProps } from "@/type";
 import { AlertTriangle, Briefcase, Camera, CheckCircle2, Crown, Edit, FileText, Mail, Notebook, NotebookText, Phone, RefreshCcw, UserIcon } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { ChangeEvent, useRef, useState } from "react";
 
 

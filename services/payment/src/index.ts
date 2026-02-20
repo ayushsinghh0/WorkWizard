@@ -19,6 +19,7 @@ export const instance=new Razorpay(
 
 
 const app=express()
+app.use(cors())
 app.use(express.json());
 
 app.use("/api/payment",paymentRoutes);
