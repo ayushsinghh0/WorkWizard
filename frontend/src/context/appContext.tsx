@@ -20,7 +20,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
   const [loading, setLoading] = useState(true);
   const [btnLoading, setBtnLoading] = useState(false);
-  const [applications,setApplications] = useState<Application[]|null> (null);
+  const [applications,setApplications] = useState<Application[]> ([]);
 
   const token = Cookies.get("token");
 

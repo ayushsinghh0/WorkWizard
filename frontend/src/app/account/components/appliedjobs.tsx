@@ -20,6 +20,7 @@ const AppliedJobs:React.FC<AppliedJobsProps> = ({applications}) =>{
             case "hired":return {
                 icon: CheckCircle2,
                 color:"text-green-600",
+                 bg: "bg-green-100 dark:bg-green-900/30",
                 border:"border-green-200 dark:border-green-800"
             }
         case "rejected":

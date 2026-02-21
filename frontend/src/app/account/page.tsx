@@ -36,7 +36,7 @@ const AccountPage = () =>{
                     user.role=="jobseeker" && <Skills user={user} isYourAccount={true}/>
                 }
                 {
-                    user.role==="jobseeker" && <AppliedJobs applications={applications ?? []}/>
+                    user.role==="jobseeker" && <AppliedJobs applications={applications }/>
                 }
                 {
                     user.role=="recruiter" && <Company/>

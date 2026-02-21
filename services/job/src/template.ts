@@ -86,7 +86,7 @@ View Application
 </div>
 
 <p style="font-size:14px;color:#666666;">
-Thank you for applying with HireHeaven.
+Thank you for applying with Work Wizard.
 We appreciate your interest.
 </p>
 
@@ -99,7 +99,7 @@ We appreciate your interest.
 style="background:#f8f9fa;padding:25px;border-top:1px solid #e9ecef;">
 
 <p style="margin:0 0 8px;font-size:12px;color:#999;">
-© ${new Date().getFullYear()} HireHeaven. All rights reserved.
+© ${new Date().getFullYear()} Work Wizard. All rights reserved.
 </p>
 
 <p style="margin:0;font-size:12px;color:#999;">

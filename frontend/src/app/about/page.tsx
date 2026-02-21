@@ -13,7 +13,7 @@ const About = () => {
             <img
               src="/"
               className="w-full max-w-[500px] rounded-2xl shadow-lg"
-              alt="About HireHeaven"
+              alt="About Work Wizard "
             />
           </div>
           {/* Content */}
@@ -40,7 +40,7 @@ const About = () => {
             </h2>
 
             <p className="text-lg md:text-xl opacity-80">
-              Join thousands of successful job seekers on HireHeaven
+              Join thousands of successful job seekers on Work Wizard
             </p>
             <div className="pt-4">
               <Link href="/jobs">

@@ -10,117 +10,83 @@ import { useAppData } from "@/context/appContext";
 
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuth, user, loading, logoutUser } = useAppData();
 
-  const { isAuth, user, setIsAuth, setUser, loading ,logoutUser} = useAppData();
+  const toggleMenu = () => setIsOpen(!isOpen);
+  const logoutHandler = () => logoutUser();
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const logoutHandler = () => {
-    logoutUser();
-  };
   return (
-    <nav className="z-50 sticky top-0 bg-background/80 border-b backdrop-blur-md shadow-sm">
+    <nav className="z-50 sticky top-0 bg-background/85 border-b border-violet-100 dark:border-violet-900/40 backdrop-blur-md shadow-sm shadow-violet-100/50 dark:shadow-violet-900/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16 ">
-          <div className="flex items-center">
-            <Link href={"/"} className="flex items-center gap-1 group">
-              <div className="text-2xl font-bold tracking-tight">
-                <span className="bg-linear-to-r from-violet-400 to-violet-700 bg-clip-text text-transparent">
-                  Work{" "}
-                </span>
-                <span className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-                  Wizard
-                </span>
-              </div>
-            </Link>
-          </div>
-          {/* Desktop Navigation */}
+        <div className="flex justify-between items-center h-16">
+
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-1 group">
+            <div className="text-2xl font-extrabold tracking-tight">
+              <span className="bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent group-hover:from-violet-600 group-hover:to-fuchsia-600 transition-all duration-300">
+                Work{" "}
+              </span>
+              <span className="text-foreground">Wizard</span>
+            </div>
+          </Link>
+
+          {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-1">
-            <Link href={"/"}>
-              <Button
-                variant={"ghost"}
-                className="flex items-center gap-2 font medium"
-              >
-                <Home size={16} />
-                Home
-              </Button>
-            </Link>
-            <Link href={"/jobs"}>
-              <Button
-                variant={"ghost"}
-                className="flex items-center gap-2 font medium"
-              >
-                <Briefcase size={16} />
-                Jobs
-              </Button>
-            </Link>
-            <Link href={"/about"}>
-              <Button
-                variant={"ghost"}
-                className="flex items-center gap-2 font medium"
-              >
-                <Info size={16} />
-                About
-              </Button>
-            </Link>
+            {[
+              { href: "/", icon: Home, label: "Home" },
+              { href: "/jobs", icon: Briefcase, label: "Jobs" },
+              { href: "/about", icon: Info, label: "About" },
+            ].map(({ href, icon: Icon, label }) => (
+              <Link key={href} href={href}>
+                <Button variant="ghost" className="flex items-center gap-2 font-medium hover:text-violet-600 dark:hover:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950/40 transition-colors">
+                  <Icon size={16} />
+                  {label}
+                </Button>
+              </Link>
+            ))}
           </div>
 
-          {/* Right side Actions main walaa */}
+          {/* Right Side Actions */}
           <div className="hidden md:flex items-center gap-3">
-            {loading ? (
-              ""
-            ) : (
+            {loading ? null : (
               <>
-                {" "}
                 {isAuth ? (
-                  <>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <button className="flex items-center hover:opacity-80 transition-opacity">
-                          <Avatar className="h-9 w-9 ring-offset-2 ring-offset-background ring-blue-500/20 cursor-pointer hover:ring-blue-500/40 transition-all">
-                            <AvatarImage
-                              src={user ? (user.profile_pic as string) : ""}
-                              alt={user ? user.name : ""}
-                            />
-                            <AvatarFallback className="bg-blue-100 dark:bg-blue-900 text-blue-600">
-                              {user?.name?.charAt(0).toUpperCase() || "U"}
-                            </AvatarFallback>
-                          </Avatar>
-                        </button>
-                      </PopoverTrigger>
-
-                      <PopoverContent className="w-56 p-2" align="end">
-                        <div className="px-3 py-2 mb-2 border-b">
-                          <p className="text-sm font-semibold">{user && user.name}</p>
-                          <p className="text-xs opacity-60 truncate">
-                            {user && user.email}
-                          </p>
-                        </div>
-
-                        <Link href={"/account"}>
-                          <Button
-                            className="w-full justify-start gap-2"
-                            variant={"ghost"}
-                          >
-                            <User size={16} /> My profile
-                          </Button>
-                        </Link>
-
-                        <Button
-                          className="w-full justify-start gap-2 mt-2"
-                          variant={"ghost"}
-                          onClick={logoutHandler}
-                        >
-                          <LogOut size={16} /> Log Out
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button className="flex items-center hover:opacity-80 transition-opacity">
+                        <Avatar className="h-9 w-9 ring-2 ring-offset-2 ring-offset-background ring-violet-500/40 cursor-pointer hover:ring-violet-500/70 transition-all">
+                          <AvatarImage
+                            src={user ? (user.profile_pic as string) : ""}
+                            alt={user ? user.name : ""}
+                          />
+                          <AvatarFallback className="bg-violet-100 dark:bg-violet-900 text-violet-700 dark:text-violet-300 font-bold">
+                            {user?.name?.charAt(0).toUpperCase() || "U"}
+                          </AvatarFallback>
+                        </Avatar>
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-56 p-2 border-violet-100 dark:border-violet-800" align="end">
+                      <div className="px-3 py-2 mb-2 border-b border-violet-100 dark:border-violet-800">
+                        <p className="text-sm font-semibold">{user?.name}</p>
+                        <p className="text-xs opacity-60 truncate">{user?.email}</p>
+                      </div>
+                      <Link href="/account">
+                        <Button className="w-full justify-start gap-2 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950/40" variant="ghost">
+                          <User size={16} /> My Profile
                         </Button>
-                      </PopoverContent>
-                    </Popover>
-                  </>
+                      </Link>
+                      <Button
+                        className="w-full justify-start gap-2 mt-1 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30"
+                        variant="ghost"
+                        onClick={logoutHandler}
+                      >
+                        <LogOut size={16} /> Log Out
+                      </Button>
+                    </PopoverContent>
+                  </Popover>
                 ) : (
-                  <Link href={"/login"}>
-                    <Button className="gap-2">
+                  <Link href="/login">
+                    <Button className="gap-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 shadow-sm shadow-violet-400/30 text-white border-0 transition-all duration-300">
                       <User size={16} />
                       Sign in
                     </Button>
@@ -131,13 +97,12 @@ export const NavBar = () => {
             <ModeToggle />
           </div>
 
-          {/* Mbile meanu button */}
-          <div className="md:hidden flex items-center gap-3 ">
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center gap-3">
             <ModeToggle />
-
             <button
               onClick={toggleMenu}
-              className="p-2 rounded-lg hover:bg-accent transition-colors "
+              className="p-2 rounded-lg hover:bg-violet-50 dark:hover:bg-violet-950/40 hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
               aria-label="Toggle menu"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -146,74 +111,41 @@ export const NavBar = () => {
         </div>
       </div>
 
-      {/* Moblieee view */}
-      <div
-        className={`md:hidden border-t overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-96 opacity-100" : "max-h-0 opacity-0"}`}
-      >
+      {/* Mobile Menu */}
+      <div className={`md:hidden border-t border-violet-100 dark:border-violet-900/40 overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
         <div className="px-3 py-3 space-y-1 bg-background/95 backdrop-blur-md">
-          {/* isauth or user */}
-          <Link href={"/Home"} onClick={toggleMenu}>
-            <Button
-              variant={"ghost"}
-              className="w-full justify-start gap-3 h-11"
-            >
-              <Home size={18} />
-              Home
-            </Button>
-          </Link>
-
-          <Link href={"/Jobs"} onClick={toggleMenu}>
-            <Button
-              variant={"ghost"}
-              className="w-full justify-start gap-3 h-11"
-            >
-              <Briefcase size={18} />
-              Jobs
-            </Button>
-          </Link>
-
-          <Link href={"/about"} onClick={toggleMenu}>
-            <Button
-              variant={"ghost"}
-              className="w-full justify-start gap-3 h-11"
-            >
-              <Info size={18} />
-              About
-            </Button>
-          </Link>
+          {[
+            { href: "/", icon: Home, label: "Home" },
+            { href: "/jobs", icon: Briefcase, label: "Jobs" },
+            { href: "/about", icon: Info, label: "About" },
+          ].map(({ href, icon: Icon, label }) => (
+            <Link key={href} href={href} onClick={toggleMenu}>
+              <Button variant="ghost" className="w-full justify-start gap-3 h-11 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950/40">
+                <Icon size={18} /> {label}
+              </Button>
+            </Link>
+          ))}
 
           {isAuth ? (
             <>
-              {" "}
-              <Link href={"/about"} onClick={toggleMenu}>
-                <Button
-                  variant={"ghost"}
-                  className="w-full justify-start gap-3 h-11"
-                >
-                  <User size={18} />
-                  myProfile
+              <Link href="/account" onClick={toggleMenu}>
+                <Button variant="ghost" className="w-full justify-start gap-3 h-11 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950/40">
+                  <User size={18} /> My Profile
                 </Button>
               </Link>
               <Button
-                variant={"destructive"}
+                variant="destructive"
                 className="w-full justify-start gap-3 h-11"
-                onClick={() => {
-                  logoutHandler();
-                  toggleMenu();
-                }}
+                onClick={() => { logoutHandler(); toggleMenu(); }}
               >
-                <LogOut size={18} /> LogOut
+                <LogOut size={18} /> Log Out
               </Button>
             </>
           ) : (
-            <Link href={"/login"} onClick={toggleMenu}>
-              <Button
-                variant={"ghost"}
-                className="w-full justify-start gap-3 h-11 mt-2"
-              >
-                <User size={18} />
-                Sign-in
-              </Button>{" "}
+            <Link href="/login" onClick={toggleMenu}>
+              <Button className="w-full justify-start gap-3 h-11 mt-2 bg-gradient-to-r from-violet-600 to-purple-600 text-white border-0">
+                <User size={18} /> Sign in
+              </Button>
             </Link>
           )}
         </div>
@@ -221,35 +153,3 @@ export const NavBar = () => {
     </nav>
   );
 };
-
-/* "use client";
-
-import Link from "next/link";
-import React, { useState } from "react";
-
-export const NavBar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <nav className="z-50 sticky top-0 border-b backdrop-blur-md shadow-sm ">
-
-      <div className="flex justify-between items-center h-16 px-4">
-
-        <Link href="/" className="flex items-center gap-1">
-
-          <div className="text-2xl font-bold tracking-tight">
-
-            <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-              Hired
-              <span className="text-red-500">Heaven</span>
-            </span>
-
-          </div>
-
-        </Link>
-
-      </div>
-    </nav>
-  );
-};
- */
