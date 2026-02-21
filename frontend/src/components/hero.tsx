@@ -48,7 +48,7 @@ const Hero = () => {
 
             {/* Description */}
             <p className="text-lg md:text-xl leading-relaxed text-muted-foreground max-w-xl">
-              Connect with top employers and discover opportunities that match your skills. Whether you're a job seeker or recruiter, we've got powerful tools and a seamless experience.
+              Connect with top employers and discover opportunities that match your skills. Whether you are a job seeker or recruiter, we have got powerful tools and a seamless experience.
             </p>
 
             {/* Stats */}
